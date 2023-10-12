@@ -15,23 +15,26 @@ def RMS(samples):
 #fonset devuelve el índice en una lista de muestras (samples)
 #del primer disparo que encuentra después de un índice inicial (count).
 #De no encontrar ninguno, devuelve False
-def fonset(samples, num, count=0):
+def fonset(samples, num=1, count=0, sr=44100):
     if (count+6000) > len(samples):
         return False
     
-    print(f'\n\nBuscando inicio {count//88200 +1} del audio {num}')
+    print(f'\n\nBuscando inicio {count//(2*sr) + 1} del audio {num}')
 
+    inc = math.trunc(sr*0.15)
+    ic = math.trunc(sr*0.002)
+    sc = math.trunc(sr*0.0025)
     ind = count
-    bg = samples[(count):(count+6000)]
+    bg = samples[(count):(count+inc)]
     Lbg = max(bg)
 
     while True:
-        if len(samples) <= ind + 111:
+        if len(samples) <= ind + sc:
             return False
         
         print(f'{ind}/{len(samples)}', end='\r')
 
-        compval = RMS(samples[ind+100:ind+111])
+        compval = RMS(samples[ind+ic:ind+sc])
         cur = samples[ind]
 
         if count != 0:    
@@ -46,12 +49,12 @@ def fonset(samples, num, count=0):
 
 #allpeakonsets devuelve una lista con todos los índices de una
 #lista de muestras (samples) en los que se da un disparo
-def allpeakonsets(samples, num):
+def allpeakonsets(samples, num, sr=44100):
     res = []
     c = 0
 
     while True:
-        curind = fonset(samples, num, c)
+        curind = fonset(samples, num, c, sr)
 
         if not curind:
             return res
