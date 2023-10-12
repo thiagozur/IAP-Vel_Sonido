@@ -46,10 +46,10 @@ def fonset(samples, init=0, count=0):
         cur = samples[ind]
 
         if init != 0:    
-            if cur > 2*Lbg and compval < cur and ind > init + 44100:
+            if cur > 3*Lbg and compval < cur and ind > init + 44100:
                 return ind
         else:
-            if cur > 2*Lbg and compval < cur:
+            if cur > 3*Lbg and compval < cur:
                 return ind
             
         ind+=1
