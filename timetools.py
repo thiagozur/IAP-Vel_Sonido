@@ -1,6 +1,5 @@
 import librosa
 import math
-from matplotlib import pyplot as plt
 
 def round_up(n, decimals=0):
     multiplier = 10**decimals
