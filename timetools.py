@@ -1,31 +1,7 @@
 import librosa
 import math
 
-def round_up(n, decimals=0):
-    multiplier = 10**decimals
-
-    return math.ceil(n * multiplier) / multiplier
-
-
-def btonset(samples, peakpos):
-    peakval = samples[peakpos]
-    ind = peakpos
-
-    while True:
-        if ind == 0:
-            break
-
-        cur = samples[ind]
-        prev = samples[ind - 10]
-
-        if cur < 0.001*peakval or prev == 0.0:
-            break
-
-        ind -= 10
-
-    return ind
-
-
+#RMS devuelve el valor eficaz de una lista de muestras (samples)
 def RMS(samples):
     sqsum = 0
     N = len(samples)
@@ -36,6 +12,9 @@ def RMS(samples):
     return math.sqrt(sqsum/N)
 
 
+#fonset devuelve el índice en una lista de muestras (samples)
+#del primer disparo que encuentra después de un índice inicial (count).
+#De no encontrar ninguno, devuelve False
 def fonset(samples, num, count=0):
     if (count+6000) > len(samples):
         return False
@@ -65,7 +44,9 @@ def fonset(samples, num, count=0):
         ind+=1
 
 
-def allpeaks(samples, num):
+#allpeakonsets devuelve una lista con todos los índices de una
+#lista de muestras (samples) en los que se da un disparo
+def allpeakonsets(samples, num):
     res = []
     c = 0
 
@@ -79,8 +60,9 @@ def allpeaks(samples, num):
         c += 88200
         
 
-
-def tdiffer(p1, p2, srd=48000):
+#tdiffer devuelve una lista con las diferencias de tiempo en segundos
+#entre cada par de valores de dos listas de muestras (p1 y p2)
+def tdiffer(p1, p2, srd=44100):
     tups = list(map(lambda x, y: (x,y), p1, p2))
     res = []
 
@@ -90,6 +72,9 @@ def tdiffer(p1, p2, srd=48000):
     return res
 
 
+#statsvel devuelve una string con la velocidad media hallada
+#junto a su error estadístico a partir de una lista de diferencias
+#de tiempo (tdiffs) y una distancia (d)
 def statsvel(tdiffs, d):
     vels = []
 
