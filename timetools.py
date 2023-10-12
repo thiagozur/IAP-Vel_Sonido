@@ -1,5 +1,6 @@
 import librosa
 import math
+from matplotlib import pyplot as plt
 
 def round_up(n, decimals=0):
     multiplier = 10**decimals
@@ -29,34 +30,44 @@ def RMS(samples):
     
     return math.sqrt(sqsum/N)
 
-def fonset(samples, init=0):
-    bg = samples[:2000]
-    Lbg = max(bg)
+
+def fonset(samples, init=0, count=0):
+    if (count+6000) > len(samples):
+        return False
+
     ind = 0
+    bg = samples[(count):(count+6000)]
+    Lbg = max(bg)
+
     while True:
         if len(samples) <= ind + 111:
-            return False
-        #compval = (math.sqrt(samples[ind+110]**2) + math.sqrt(samples[ind+111]**2))/2
+            return False   
+
         compval = RMS(samples[ind+100:ind+111])
         cur = samples[ind]
+
         if init != 0:    
-            if cur > 8*Lbg and compval < cur and ind > init + 44100:
+            if cur > 2*Lbg and compval < cur and ind > init + 44100:
                 return ind
         else:
-            if cur > 8*Lbg and compval < cur:
+            if cur > 2*Lbg and compval < cur:
                 return ind
+            
         ind+=1
 
 
 def allpeaks(samples):
     res = []
     p = 0
+    c = 0
     while True:
-        curind = fonset(samples, p)
+        curind = fonset(samples, p, c)
         if not curind:
             return res
         res.append(curind)
         p = curind
+        c += 88200
+        
 
 
 def tdiffer(p1, p2, srd=48000):
