@@ -155,7 +155,7 @@ def tdiffer(p1: list, p2: list, srd=44100):
 
 
 def statsvel(tdiffs: list, d: int):
-    """Calcula la velocidad media del sonido y su error estadístico a partir de una lista de diferencias de tiempo (en segundos)
+    """Calcula la velocidad media del sonido y su error estadístico redondeados a dos decimales a partir de una lista de diferencias de tiempo (en segundos)
     y la distancia recorrida (en metros) entre los puntos que determinan las diferencias de tiempo.
 
     La distancia entre los puntos debe ser la misma para todas las diferencias de tiempo calculadas.
