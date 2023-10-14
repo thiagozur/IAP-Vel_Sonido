@@ -112,6 +112,8 @@ with dpg.theme() as global_theme:
 dpg.bind_theme(global_theme)
 
 dpg.create_viewport(title='Calcular velocidad del sonido', width=800, height=650)
+dpg.set_viewport_small_icon('./assets/vsonido.ico')
+dpg.set_viewport_large_icon('./assets/vsonido.ico')
 dpg.setup_dearpygui()
 dpg.show_viewport()
 dpg.set_primary_window('vsonido', True)
