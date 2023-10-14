@@ -4,3 +4,4 @@ scrapped/
 build/
 dist/
 main.spec
+release/
