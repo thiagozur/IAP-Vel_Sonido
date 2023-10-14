@@ -1,6 +1,7 @@
 import librosa
 import math
 import numpy as np
+import dearpygui.dearpygui as dpg
 
 def RMS(samples: np.ndarray):
     """Calcula el valor eficaz de una selección de muestras.
@@ -26,7 +27,7 @@ def RMS(samples: np.ndarray):
     return RMS
 
 
-def fonset(samples: np.ndarray, id="1", count=0, sr=44100):
+def fonset(samples: np.ndarray, count=0, sr=44100):
     """Busca el índice en una lista de muestras de la primera muestra en
     la que comienza a subir la presión sonora hacia un pico.
 
@@ -55,7 +56,6 @@ def fonset(samples: np.ndarray, id="1", count=0, sr=44100):
     if (count+6000) > len(samples):
         return False
     
-    print(f'\n\nBuscando inicio {count//(2*sr) + 1} del audio {id}')
 
     inc = math.trunc(sr*0.15)
     ic = math.trunc(sr*0.002)
@@ -67,8 +67,6 @@ def fonset(samples: np.ndarray, id="1", count=0, sr=44100):
     while True:
         if len(samples) <= ind + sc:
             return False
-        
-        print(f'{ind}/{len(samples)}', end='\r')
 
         compval = RMS(samples[ind+ic:ind+sc])
         cur = samples[ind]
@@ -83,7 +81,7 @@ def fonset(samples: np.ndarray, id="1", count=0, sr=44100):
         ind+=1
 
 
-def allpeakonsets(samples: np.ndarray, id: str, sr=44100):
+def allpeakonsets(samples: np.ndarray, pinc: float, pbar, sr=44100):
     """Busca todos los índices en una lista de muestras en los que la presión sonora comienza a subir hacia un pico.
     
     Parámetros
@@ -106,12 +104,16 @@ def allpeakonsets(samples: np.ndarray, id: str, sr=44100):
     c = 0
 
     while True:
-        curind = fonset(samples, id, c, sr)
+        curind = fonset(samples, c, sr)
 
         if not curind:
             return res
         
         res.append(curind)
+        cbar = dpg.get_value(pbar)
+        cbar += pinc
+        dpg.set_value(pbar, cbar)
+
         c += 88200
         
 
@@ -186,6 +188,6 @@ def statsvel(tdiffs: list, d: int):
 
     sdev = round(math.sqrt(sqsum/len(vels)), 2)
 
-    resstring = f'La velocidad media del sonido hallada es ({avg} ± {sdev}) m/s'
+    resstring = f'({avg} ± {sdev}) m/s'
 
     return resstring
