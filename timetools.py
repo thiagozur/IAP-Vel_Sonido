@@ -82,24 +82,6 @@ def fonset(samples: np.ndarray, count=0, sr=44100):
 
 
 def allpeakonsets(samples: np.ndarray, pinc: float, pbar, sr=44100):
-    """Busca todos los índices en una lista de muestras en los que la presión sonora comienza a subir hacia un pico.
-    
-    Parámetros
-    ----------
-    samples: np.ndarray
-        La lista de muestras en la que se quiere encontrar los índices
-    
-    id: str
-        Nombre identificador del archivo siendo analizado para mostrar por pantalla
-    
-    sr: int
-        La frecuencia de muestreo del audio a analizar
-    
-    Devuelve
-    --------
-    res: list
-        La lista con todos los índices encontrados"""
-    
     res = []
     c = 0
 
@@ -118,32 +100,6 @@ def allpeakonsets(samples: np.ndarray, pinc: float, pbar, sr=44100):
         
 
 def tdiffer(p1: list, p2: list, srd=44100):
-    """Calcula las diferencias de tiempo entre los pares de índices correspondientes
-    en dos listas de índices de muestras.
-
-    Los índices de muestras deben provenir de audios de igual frecuencia de muestreo (por defecto ``srd=44100``).
-    
-    Parámetros
-    ----------
-    p1: list
-        La primera lista de índices
-    
-    p1: list
-        La segunda lista de índices
-    
-    sr: int
-        La frecuencia de muestreo de los archivos de donde se obtuvieron los índices
-    
-    Devuelve
-    --------
-    res: list
-        La lista con todas las diferencias de tiempo (en segundos) entre los pares
-        de índices de las listas encontrados
-
-    Errores
-    -------    
-        ValueError si las listas de índices no tienen la misma cantidad de elementos"""
-    
     if len(p1) != len(p2):
         raise ValueError('Las listas de índices no tienen la misma cantidad de elementos')
 
@@ -157,24 +113,6 @@ def tdiffer(p1: list, p2: list, srd=44100):
 
 
 def statsvel(tdiffs: list, d: int):
-    """Calcula la velocidad media del sonido y su error estadístico redondeados a dos decimales a partir de una lista de diferencias de tiempo (en segundos)
-    y la distancia recorrida (en metros) entre los puntos que determinan las diferencias de tiempo.
-
-    La distancia entre los puntos debe ser la misma para todas las diferencias de tiempo calculadas.
-    
-    Parámetros
-    ----------
-    tdiffs: list
-        La lista de diferencias de tiempo
-
-    d: int
-        La distancia recorrida
-    
-    Devuelve
-    --------
-    resstring: str
-        Texto reportando la velocidad media hallada con su error estadístico"""
-    
     vels = []
 
     for tdiff in tdiffs:
